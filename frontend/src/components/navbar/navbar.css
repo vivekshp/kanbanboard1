@@ -1,0 +1,22 @@
+.nav {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border-strong);
+    z-index: 20;
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+  }
+  .nav-brand {
+    font-weight: 700;
+    letter-spacing: .3px;
+    color: #111;
+  }
+  .nav-user {
+    color: var(--muted);
+    font-size: 14px;
+  }

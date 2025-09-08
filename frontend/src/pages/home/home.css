@@ -1,0 +1,32 @@
+.home-section {
+    display: grid;
+    gap: 16px;
+    padding-top: 16px;
+  }
+  
+  .panel {
+    background: #fff;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  
+  .panel-title {
+    margin: 0 0 6px;
+    color: #111;
+  }
+  
+  .panel-subtle {
+    color: var(--muted);
+  }
+  
+  .primary-btn {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: var(--primary);
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .primary-btn:hover { background: var(--primary-dark); }
