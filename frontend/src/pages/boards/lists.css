@@ -1,0 +1,75 @@
+.lists {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  
+  .list {
+    width: 280px;
+    min-width: 280px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 220px);
+  }
+  
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  .list-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+  }
+  
+  .list-title-form { width: 100%; }
+  
+  .list-title-input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .list-more {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+  }
+  
+  .list-body {
+    padding: 8px;
+    display: grid;
+    gap: 8px;
+    overflow-y: auto;
+  }
+  
+  .list-footer {
+    padding: 8px;
+    border-top: 1px solid var(--border);
+  }
+  
+  .btn-link {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+  }
+  .btn-link:hover { text-decoration: underline; }

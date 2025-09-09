@@ -10,7 +10,7 @@
     width: 100%;
     max-width: 420px;
     background: #fff;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius);
     padding: 24px;
   }
@@ -29,7 +29,7 @@
   .auth-input {
     padding: 10px 12px;
     border-radius: 8px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     background: #fff;
     color: var(--text);
     outline: none;

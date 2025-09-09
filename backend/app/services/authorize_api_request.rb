@@ -26,7 +26,6 @@ class AuthorizeApiRequest
       if headers['Authorization'].present?
         return headers['Authorization'].split(' ').last
       elsif headers['Cookie'].present?
-        # Extract JWT from HTTP-only cookie
         cookie_match = headers['Cookie'].match(/jwt=([^;]+)/)
         return cookie_match[1] if cookie_match
       end

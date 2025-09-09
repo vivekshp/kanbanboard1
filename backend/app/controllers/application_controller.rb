@@ -12,4 +12,13 @@ class ApplicationController < ActionController::API
     def current_user
       @current_user
     end
+
+    def render_success(data, status: :ok)
+      render json: { success: true, data: data }, status: status
+    end
+  
+    def render_error(errors, status: :unprocessable_content)
+      render json: { success: false, errors: Array(errors) }, status: status
+    end
+    
   end

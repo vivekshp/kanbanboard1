@@ -19,7 +19,9 @@ export default function Login() {
       navigate('/');
     } catch (error) {
         if (error.response?.data?.errors) {
-          setErr(error.response.data.errors.join(", "));
+            setErr(error.response.data.errors.join(", "));
+          } else if (error.response?.data?.error) {
+            setErr(error.response.data.error);
         } else {
           setErr("Login failed");
         }

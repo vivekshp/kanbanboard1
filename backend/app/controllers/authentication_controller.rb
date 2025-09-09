@@ -27,6 +27,15 @@ class AuthenticationController < ApplicationController
       delete_jwt_cookie
       render json: { message: 'Logged out successfully' }
     end
+
+    def me
+      if current_user
+        render json: { user: current_user.as_json(except: :password_digest) }
+      else
+        render json: { error: 'Not logged in' }, status: :unauthorized
+      end
+    end
+    
     
     private
     
@@ -35,11 +44,11 @@ class AuthenticationController < ApplicationController
     end
     
     def set_jwt_cookie(token)
-      cookies.signed[:jwt] = {
+      cookies[:jwt] = {
         value: token,
         httponly: true,
-        secure: Rails.env.production?,
-        same_site: :strict,
+        secure: true,
+        same_site: :none,
         expires: 24.hours.from_now
       }
     end

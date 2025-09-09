@@ -9,6 +9,12 @@ Rails.application.routes.draw do
   post 'auth/register', to: 'authentication#register'
   post 'auth/login', to: 'authentication#login'
   delete 'auth/logout', to: 'authentication#logout'
+  get 'auth/me', to: 'authentication#me'
+
+  resources :boards, only: [:index, :show, :create, :update, :destroy] do
+    resources :lists, only: [:index, :show, :create, :update, :destroy]
+  end
+
 
 
 end
