@@ -75,3 +75,16 @@ export const getLists = async (boardId) => {
     const res = await api.delete(`/boards/${boardId}/lists/${id}`);
     return res.data;
   };
+
+//Tasks
+export const getTasks = (boardId, listId) =>
+    api.get(`/boards/${boardId}/lists/${listId}/tasks`).then(r => r.data);
+  
+  export const createTask = (boardId, listId, attrs) =>
+    api.post(`/boards/${boardId}/lists/${listId}/tasks`, { task: attrs }).then(r => r.data);
+  
+  export const updateTask = (boardId, listId, taskId, attrs) =>
+    api.patch(`/boards/${boardId}/lists/${listId}/tasks/${taskId}`, { task: attrs }).then(r => r.data);
+  
+  export const deleteTask = (boardId, listId, taskId) =>
+    api.delete(`/boards/${boardId}/lists/${listId}/tasks/${taskId}`).then(r => r.data);

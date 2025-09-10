@@ -49,7 +49,7 @@ class ListsController < ApplicationController
     end
   
     def list_params
-        params.require(:list).permit(:title, :position)
+        params.require(:list).permit(:title, :position, :limit)
       
     end
   end

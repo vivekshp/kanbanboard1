@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_09_063629) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_09_090448) do
   create_table "boards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -30,6 +30,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_063629) do
     t.index ["board_id"], name: "index_lists_on_board_id"
   end
 
+  create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "list_id", null: false
+    t.string "title"
+    t.text "description"
+    t.integer "position"
+    t.datetime "due_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["list_id"], name: "index_tasks_on_list_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -40,4 +51,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_063629) do
 
   add_foreign_key "boards", "users"
   add_foreign_key "lists", "boards"
+  add_foreign_key "tasks", "lists"
 end

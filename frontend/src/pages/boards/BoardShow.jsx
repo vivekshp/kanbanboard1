@@ -1,79 +1,73 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { getBoard, getLists, createList, updateList, deleteList } from '../../lib/api';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useBoard } from '../../context/BoardContext';
 import List from './List';
-import './boardshow.css';
+import './boards.css';
 import './lists.css';
+import './boardshow.css';
 
 export default function BoardShow() {
-  const { id } = useParams();
-  const [board, setBoard] = useState(null);
-  const [lists, setLists] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { board, lists, loading, createList } = useBoard();
   const [newTitle, setNewTitle] = useState('');
-
-  const load = async () => {
-    setLoading(true);
-    try {
-      const [b, l] = await Promise.all([getBoard(id), getLists(id)]);
-      setBoard(b.data);
-      setLists(l.data || []);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { load(); }, [id]);
+  const [newPosition, setNewPosition] = useState('');
+  const [newLimit, setNewLimit] = useState('');
 
   const handleCreateList = async (e) => {
     e.preventDefault();
-    if (!newTitle.trim()) return;
-    await createList(id, {  title: newTitle  });
+    const attrs = {
+      title: newTitle.trim(),
+      position: newPosition ? Number(newPosition) : undefined,
+      limit: newLimit ? Number(newLimit) : undefined,
+    };
+    if (!attrs.title) return;
+    
+    await createList(attrs);
     setNewTitle('');
-    await load();
-  };
-
-  const handleUpdateList = async (listId, payload) => {
-    await updateList(id, listId, { payload });
-    await load();
-  };
-
-  const handleDeleteList = async (listId) => {
-    if (!confirm('Delete this list?')) return;
-    await deleteList(id, listId);
-    await load();
+    setNewPosition('');
+    setNewLimit('');
   };
 
   if (loading) return <div className="loading">Loading...</div>;
   if (!board) return <div className="empty-state">Board not found.</div>;
 
   return (
-    <div className="boards-container">
-      <div className="boards-header">
-        <h1>{board.title}</h1>
-        <Link to="/boards" className="btn-small">Back</Link>
+    <div className="boardshow-wrap">
+      <div className="boardshow-header">
+        <h1 className="boardshow-title">{board.title}</h1>
+        <div className="boardshow-actions">
+          <Link to="/boards" className="btn-small">Back</Link>
+        </div>
       </div>
 
-      <form onSubmit={handleCreateList} style={{ marginBottom: 12, display: 'flex', gap: 8 }}>
-        <input
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-          placeholder="New list title"
-          style={{ flex: 1, padding: '10px 12px', border: '1px solid var(--border)', borderRadius: 8 }}
+      <form onSubmit={handleCreateList} className="boardshow-newlist">
+        <input 
+          className="boardshow-input" 
+          placeholder="Title" 
+          value={newTitle} 
+          onChange={(e) => setNewTitle(e.target.value)} 
         />
-        <button className="btn-primary" type="submit">Add List</button>
+        <input 
+          className="boardshow-input" 
+          placeholder="Position" 
+          type="number" 
+          min="1" 
+          value={newPosition} 
+          onChange={(e) => setNewPosition(e.target.value)} 
+        />
+        <input 
+          className="boardshow-input" 
+          placeholder="Limit" 
+          type="number" 
+          min="1" 
+          value={newLimit} 
+          onChange={(e) => setNewLimit(e.target.value)} 
+        />
+        <button className="boardshow-btn" type="submit">Add List</button>
       </form>
 
       <div className="lists">
-        {lists.map((lst) => (
-          <List
-            key={lst.id}
-            list={lst}
-            onUpdate={handleUpdateList}
-            onDelete={handleDeleteList}
-          >
-            
-          </List>
+        {lists.map((list) => (
+          <List key={list.id} list={list} />
         ))}
       </div>
     </div>

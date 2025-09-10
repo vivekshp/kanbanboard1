@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   get 'auth/me', to: 'authentication#me'
 
   resources :boards, only: [:index, :show, :create, :update, :destroy] do
-    resources :lists, only: [:index, :show, :create, :update, :destroy]
+    resources :lists, only: [:index, :show, :create, :update, :destroy] do
+      resources :tasks, only: [:index, :show, :create, :update, :destroy]
+    end
   end
 
 

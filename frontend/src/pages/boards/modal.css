@@ -1,0 +1,33 @@
+.modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+  }
+  .modal-card {
+    width: 92%; max-width: 560px;
+    background: #fff; border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .modal-close {
+    border: none; background: transparent; font-size: 22px; cursor: pointer; color: var(--muted);
+  }
+  .modal-form { display: grid; gap: 12px; }
+  .field { display: grid; gap: 6px; }
+  .field label { font-size: 13px; color: var(--muted); }
+  .field input, .field textarea, .field select {
+    padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .btn-primary {
+    background: var(--primary); color: #fff; border: none; padding: 10px 14px; border-radius: 8px; font-weight: 600; cursor: pointer;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-secondary {
+    background: #6b7280; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer;
+  }

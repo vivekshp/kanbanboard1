@@ -1,14 +1,26 @@
 import { useAuth } from '../../context/AuthContext';
+import { logout as apiLogout } from '../../lib/api';
 import './navbar.css';
 
 export default function Navbar() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
+
+  const onLogout = async () => {
+    await apiLogout();
+    setUser(null);
+  };
+
   return (
     <header className="nav">
       <div className="nav-inner container">
         <div className="nav-brand">Kanban</div>
         <div className="nav-right">
-          {user ? <span className="nav-user">{user.name}</span> : null}
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span className="nav-user">{user.name}</span>
+              <button className="btn-small" onClick={onLogout}>Logout</button>
+            </div>
+          ) : null}
         </div>
       </div>
     </header>
