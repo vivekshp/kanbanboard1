@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { useBoard } from '../../context/BoardContext';
+import InviteModal from './InviteModal';
 import List from './List';
 import './boards.css';
 import './lists.css';
 import './boardshow.css';
 
 export default function BoardShow() {
+  const { user } = useAuth();
   const { board, lists, loading, createList } = useBoard();
   const [newTitle, setNewTitle] = useState('');
   const [newPosition, setNewPosition] = useState('');
   const [newLimit, setNewLimit] = useState('');
+  const [inviteOpen, setInviteOpen] = useState(false);
+
+  const role = board?.role;
+  const canInvite = !!user && board && ['owner', 'admin'].includes(role || 'owner');
 
   const handleCreateList = async (e) => {
     e.preventDefault();
@@ -35,6 +42,7 @@ export default function BoardShow() {
       <div className="boardshow-header">
         <h1 className="boardshow-title">{board.title}</h1>
         <div className="boardshow-actions">
+          {canInvite && <button className="btn-small" onClick={() => setInviteOpen(true)}>Invite</button>}
           <Link to="/boards" className="btn-small">Back</Link>
         </div>
       </div>
@@ -70,6 +78,7 @@ export default function BoardShow() {
           <List key={list.id} list={list} />
         ))}
       </div>
+      <InviteModal open={inviteOpen} onClose={() => setInviteOpen(false)} boardId={board.id} canInvite={canInvite} />
     </div>
   );
 }

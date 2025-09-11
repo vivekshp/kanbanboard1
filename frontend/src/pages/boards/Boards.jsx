@@ -70,9 +70,14 @@ export default function Boards() {
     <div className="boards-container">
       <div className="boards-header">
         <h1>My Boards</h1>
-        <button className="btn-primary" onClick={() => setShowForm(true)}>
-          Create Board
-        </button>
+        <div className="boards-actions">
+      <button className="btn-primary" onClick={() => setShowForm(true)}>
+        Create Board
+      </button>
+      <Link to="/" className="btn-small">
+        ← Back to Home
+      </Link>
+    </div>
       </div>
 
       {showForm && (

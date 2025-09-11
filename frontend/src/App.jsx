@@ -8,6 +8,7 @@ import Register from './pages/auth/Register';
 import AppLayout from './layouts/AppLayout';
 import Boards from './pages/boards/Boards';
 import BoardShow from './pages/boards/BoardShow';
+import Invites from './pages/invites/Invites';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
                 <BoardShow />
               </BoardProvider>
             } />
+             <Route path="/invites" element={<Invites />} />
           </Route>
           <Route path="*" element={<AppLayout><Login /></AppLayout>} />
         </Routes>

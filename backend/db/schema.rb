@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_09_090448) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_10_181918) do
+  create_table "board_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "board_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "role", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 0, null: false
+    t.index ["board_id"], name: "index_board_members_on_board_id"
+    t.index ["user_id"], name: "index_board_members_on_user_id"
+  end
+
   create_table "boards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -28,6 +39,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_090448) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["board_id"], name: "index_lists_on_board_id"
+  end
+
+  create_table "task_assignments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_task_assignments_on_task_id"
+    t.index ["user_id"], name: "index_task_assignments_on_user_id"
   end
 
   create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -49,7 +69,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_09_090448) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "board_members", "boards"
+  add_foreign_key "board_members", "users"
   add_foreign_key "boards", "users"
   add_foreign_key "lists", "boards"
+  add_foreign_key "task_assignments", "tasks"
+  add_foreign_key "task_assignments", "users"
   add_foreign_key "tasks", "lists"
 end

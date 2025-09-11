@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe "Boards", type: :request do
     let(:user) {FactoryBot.create(:user)}
     let!(:board){FactoryBot.create(:board,user: user)}
+
     let(:valid_params) { {title: 'Test Board', description: 'test description'} }
 
     before do

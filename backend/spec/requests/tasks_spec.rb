@@ -6,10 +6,14 @@ RSpec.describe "Tasks", type: :request do
   let!(:board){ FactoryBot.create(:board, user: user) }
   let!(:list) { FactoryBot.create(:list, board: board) }
   let!(:task) {FactoryBot.create(:task, list: list)}
+  let!(:board_member) {FactoryBot.create(:board_member, board: board, user: user, role: :admin, status: :accepted) }
   let(:valid_params)   { { task: { title: "New Task", description: "desc", position: 1 } } }
   let(:invalid_params) { { task: { title: "" } } }
 
-  before { sign_in(user) }
+  before { 
+    TaskAssignment.create!(task: task, user: user)
+    sign_in(user)
+   }
 
   describe "GET /boards/:board_id/lists/:list_id/tasks" do
     it "returns all tasks for the list" do

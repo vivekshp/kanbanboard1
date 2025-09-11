@@ -3,6 +3,6 @@ FactoryBot.define do
     title { "Sample List" }
     limit { 10 }
     position { 1 }
-    board { nil }
+    association :board
   end
 end

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :task do
-    list { nil }
+    association :list
     title { "Test Task" }
     description { "Test description" }
     position { 1 }

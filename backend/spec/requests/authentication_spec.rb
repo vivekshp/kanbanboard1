@@ -6,7 +6,7 @@ RSpec.describe 'Authentication', type: :request do
       post '/auth/register', params: FactoryBot.attributes_for(:user)
       
       expect(response).to have_http_status(:created)
-      expect(response.cookies['jwt']).to be_present
+      expect(cookies[:jwt]).to be_present
     end
 
     it 'returns errors for invalid data' do
@@ -22,7 +22,7 @@ RSpec.describe 'Authentication', type: :request do
       post '/auth/login', params: { email: user.email, password: 'password123' }
       
       expect(response).to have_http_status(:ok)
-      expect(response.cookies['jwt']).to be_present
+      expect(cookies[:jwt]).to be_present
     end
 
     it 'returns 401 for wrong credentials' do

@@ -134,7 +134,7 @@
   
   .board-actions {
     display: flex;
-    gap: 8px;
+    gap: 12px;
   }
   
   .btn-small {
@@ -144,6 +144,7 @@
     border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
+    margin: 5px;
   }
   
   .btn-small:hover {

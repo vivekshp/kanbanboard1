@@ -12,6 +12,7 @@ export default function Home() {
         <p style={{ color: 'var(--muted)' }}>Manage your Kanban boards and tasks.</p>
         <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
           <Link to="/boards" className="primary-btn">View Boards</Link>
+          <Link to="/invites" className="primary-btn">Board Invites</Link>
         </div>
       </div>
     </section>

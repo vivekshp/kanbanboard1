@@ -88,3 +88,28 @@ export const getTasks = (boardId, listId) =>
   
   export const deleteTask = (boardId, listId, taskId) =>
     api.delete(`/boards/${boardId}/lists/${listId}/tasks/${taskId}`).then(r => r.data);
+
+  export const searchUsers = (q) => 
+    api.get('/users/search', { params: { q } }).then(r => r.data);
+
+  export const listMembers = (boardId) => 
+    api.get(`/boards/${boardId}/members`).then(r => r.data);
+
+  export const inviteMember = (boardId, { userId, role = 'member' }) =>
+   api.post(`/boards/${boardId}/members`, { board_member: { user_id: userId, role } }).then(r => r.data);
+
+  export const updateMember = (boardId, memberId, attrs) =>
+   api.patch(`/boards/${boardId}/members/${memberId}`, attrs).then(r => r.data);
+
+  export const removeMember = (boardId, memberId) =>
+   api.delete(`/boards/${boardId}/members/${memberId}`).then(r => r.status === 204);
+
+  //Invites
+  export const getInvites = () =>
+    api.get('/invites').then(r => r.data);
+  
+  export const respondInvite = (inviteId, status) =>
+    api.patch(`/invites/${inviteId}`, { status }).then(r => r.data);
+  
+  export const deleteInvite = (inviteId) =>
+    api.delete(`/invites/${inviteId}`).then(r => r.status === 204);
