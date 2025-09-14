@@ -6,16 +6,34 @@ class TasksController < ApplicationController
   
     def index
       authorize @list, :show?
-      tasks = @list.tasks.order(:position, :created_at)
+      tasks = @list.tasks
+      .includes(task_assignments: [:user, :assigned_by]) 
+      .order(:position, :created_at)
       render_success(tasks.as_json(
-    include: { assignees: { only: [:id, :name, :email] } }
-  ))
+    include: {
+    task_assignments: {
+      only: [:id, :created_at],
+      include: {
+        user: { only: [:id, :name, :email] },          # assignee
+        assigned_by: { only: [:id, :name, :email] }    # assigner
+        }
+      }
+     }
+    ))
     end
   
     def show
       authorize @task
       render_success(@task.as_json(
-    include: { assignees: { only: [:id, :name, :email] } }
+    include: {
+    task_assignments: {
+      only: [:id, :created_at],
+      include: {
+        user: { only: [:id, :name, :email] },          # assignee
+        assigned_by: { only: [:id, :name, :email] }    # assigner
+      }
+    }
+  }
   ))
     end
   
@@ -49,7 +67,15 @@ class TasksController < ApplicationController
       
           if @task.update(attrs)
             render_success(@task.as_json(
-    include: { assignees: { only: [:id, :name, :email] } }
+    include: {
+    task_assignments: {
+      only: [:id, :created_at],
+      include: {
+        user: { only: [:id, :name, :email] },          # assignee
+        assigned_by: { only: [:id, :name, :email] }    # assigner
+      }
+    }
+  }
   ))
           else
             render_error(@task.errors.full_messages, status: :unprocessable_content)
@@ -85,7 +111,9 @@ class TasksController < ApplicationController
     end
   
     def set_task
-      @task = @list.tasks.find(params[:id])
+       @task = Task
+      .includes(task_assignments: [:user, :assigned_by]) 
+      .find(params[:id])
     rescue ActiveRecord::RecordNotFound
       render_error('Task not found', status: :not_found)
     end

@@ -9,6 +9,7 @@ import AppLayout from './layouts/AppLayout';
 import Boards from './pages/boards/Boards';
 import BoardShow from './pages/boards/BoardShow';
 import Invites from './pages/invites/Invites';
+import History from './pages/history/History';
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
               </BoardProvider>
             } />
              <Route path="/invites" element={<Invites />} />
+             <Route path="/history" element={<History />} />
           </Route>
           <Route path="*" element={<AppLayout><Login /></AppLayout>} />
         </Routes>

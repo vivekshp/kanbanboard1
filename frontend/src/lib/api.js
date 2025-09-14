@@ -113,3 +113,23 @@ export const getTasks = (boardId, listId) =>
   
   export const deleteInvite = (inviteId) =>
     api.delete(`/invites/${inviteId}`).then(r => r.status === 204);
+
+  export const assignTask = (boardId, listId, taskId, userId) =>
+  api.post(`/boards/${boardId}/lists/${listId}/tasks/${taskId}/task_assignments`, {
+    user_id: userId
+  }).then(r => r.data);
+
+  export const searchBoardMembers = (boardId, q) =>
+  api.get('/users/search_board_members', { params: { board_id: boardId, q } }).then(r => r.data);
+
+  export const globalSearch = (params) =>
+  api.get('/search', { params }).then(r => r.data);
+
+export const getAssignees = (params = {}) => {
+  const searchParams = new URLSearchParams(params).toString();
+  return api.get(`/assignees?${searchParams}`).then(r => r.data);
+};
+
+// histories
+export const getHistories = (params = {}) =>
+  api.get('/histories', { params }).then(r => r.data);

@@ -15,7 +15,7 @@ class TaskAssignmentPolicy < ApplicationPolicy
       board_id: board.id,
       user_id: user.id,
       status: BoardMember.statuses[:accepted],
-      role: [BoardMember.roles[:member], BoardMember.roles[:admin]]
+      role: [BoardMember.roles[:admin]]
     )
   end
 end

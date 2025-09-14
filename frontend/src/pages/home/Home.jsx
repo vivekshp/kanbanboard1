@@ -13,6 +13,7 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
           <Link to="/boards" className="primary-btn">View Boards</Link>
           <Link to="/invites" className="primary-btn">Board Invites</Link>
+          <Link to="/history" className="primary-btn">View History</Link>
         </div>
       </div>
     </section>

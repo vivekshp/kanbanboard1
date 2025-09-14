@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_10_181918) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_14_092116) do
   create_table "board_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "board_id", null: false
     t.bigint "user_id", null: false
@@ -31,6 +31,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_10_181918) do
     t.index ["user_id"], name: "index_boards_on_user_id"
   end
 
+  create_table "histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.string "action", null: false
+    t.bigint "modified_by"
+    t.datetime "time", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.json "modified_to"
+  end
+
   create_table "lists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.integer "limit"
@@ -41,11 +52,31 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_10_181918) do
     t.index ["board_id"], name: "index_lists_on_board_id"
   end
 
+  create_table "search_indices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "task_id"
+    t.bigint "board_id"
+    t.bigint "assignee_id"
+    t.integer "status"
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_search_indices_on_assignee_id"
+    t.index ["board_id"], name: "index_search_indices_on_board_id"
+    t.index ["content"], name: "index_search_indices_on_content", type: :fulltext
+    t.index ["record_type", "record_id"], name: "index_search_indices_on_record_type_and_record_id", unique: true
+    t.index ["status"], name: "index_search_indices_on_status"
+    t.index ["task_id"], name: "index_search_indices_on_task_id"
+  end
+
   create_table "task_assignments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "task_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "assigned_by_id", null: false
+    t.index ["assigned_by_id"], name: "fk_rails_ca3ffd900d"
     t.index ["task_id"], name: "index_task_assignments_on_task_id"
     t.index ["user_id"], name: "index_task_assignments_on_user_id"
   end
@@ -75,5 +106,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_10_181918) do
   add_foreign_key "lists", "boards"
   add_foreign_key "task_assignments", "tasks"
   add_foreign_key "task_assignments", "users"
+  add_foreign_key "task_assignments", "users", column: "assigned_by_id"
   add_foreign_key "tasks", "lists"
 end

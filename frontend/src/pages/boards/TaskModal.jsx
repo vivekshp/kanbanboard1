@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import './modal.css';
+import { searchBoardMembers, assignTask } from '../../lib/api'; // assignTask: POST /tasks/:task_id/task_assignments
+import { useBoard } from '../../context/BoardContext';
+
 
 const toDateInput = (v) => {
   if (!v) return '';
@@ -11,10 +14,11 @@ export default function TaskModal({
   onClose,
   lists = [],
   defaultListId,
-  mode = 'create',      
-  initial = null,       
-  onCreate,             
-  onUpdate,             
+  mode = 'create',
+  initial = null,
+  onCreate,
+  onUpdate,
+  boardId
 }) {
   const [form, setForm] = useState({
     title: '',
@@ -23,6 +27,32 @@ export default function TaskModal({
     list_id: defaultListId,
   });
   const [err, setErr] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [assignLoading, setAssignLoading] = useState(false);
+  const { refreshBoard } = useBoard();
+
+
+
+  const handleSearch = async (q) => {
+    setSearch(q);
+    if (q.length < 2) return setSearchResults([]);
+    const res = await searchBoardMembers(boardId, q);
+    setSearchResults(res.data || []);
+  };
+
+  const handleAssign = async (userId) => {
+    setAssignLoading(true);
+    try {
+      await assignTask(boardId, defaultListId, initial.id, userId); // You need to add this to your api.js
+      await refreshBoard();
+      setAssignLoading(false);
+      onClose(); // or reload modal/task
+    } catch (err) {
+      setAssignLoading(false);
+      setErr('Failed to assign');
+    }
+  };
 
   useEffect(() => {
     if (!open) return;
@@ -66,11 +96,11 @@ export default function TaskModal({
       }
       onClose();
     } catch (err) {
-        const data = err?.response?.data;
-        const msg = Array.isArray(data?.errors) ? data.errors.join(', ')
-                  : data?.error || data?.message || err.message;
-        setErr(msg);
-      }
+      const data = err?.response?.data;
+      const msg = Array.isArray(data?.errors) ? data.errors.join(', ')
+        : data?.error || data?.message || err.message;
+      setErr(msg);
+    }
   };
 
   return (
@@ -125,6 +155,47 @@ export default function TaskModal({
             </div>
           </div>
 
+          {mode === 'edit' && initial && (
+            <div className="field">
+              <label>Assigned To</label>
+              {initial.task_assignments && initial.task_assignments.length > 0 ? (
+                <ul>
+                  {initial.task_assignments.map(a => (
+                    <li key={a.id}>
+                      {a.user.name} ({a.user.email})
+                      <div style={{ fontSize: 13, color: '#888', marginLeft: 8 }}>
+                        Assigned By: {a.assigned_by.name} ({a.assigned_by.email})
+                        <span style={{ marginLeft: 12 }}>
+                          {new Date(a.created_at).toLocaleString()}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Search user to assign"
+                    value={search}
+                    onChange={e => handleSearch(e.target.value)}
+                  />
+                  {searchResults.length > 0 && (
+                    <ul>
+                      {searchResults.map(u => (
+                        <li key={u.id}>
+                          {u.name} ({u.email})
+                          <button disabled={assignLoading} onClick={() => handleAssign(u.id)}>
+                            Assign
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              )}
+            </div>
+          )}
           <div className="actions">
             <button type="submit" className="btn-primary">
               {mode === 'edit' ? 'Save' : 'Create'}

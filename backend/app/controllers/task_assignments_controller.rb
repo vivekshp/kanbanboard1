@@ -3,7 +3,10 @@ class TaskAssignmentsController < ApplicationController
 
   def create
     user = User.find(params[:user_id])
-    assignment = @task.task_assignments.new(user: user)
+    assignment = @task.task_assignments.new(
+      user: user, 
+      assigned_by_id: current_user.id
+    )
     authorize assignment
 
     if assignment.save

@@ -35,10 +35,11 @@ export default function Boards() {
         await createBoard(formData);
       }
       await loadBoards();
-      resetForm();
     } catch (error) {
       console.error('Failed to save board:', error);
-    }
+    }finally {
+    resetForm();  
+  }
   };
 
   const handleEdit = (board) => {

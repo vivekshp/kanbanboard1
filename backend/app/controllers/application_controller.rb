@@ -14,6 +14,7 @@ class ApplicationController < ActionController::API
     
     def authenticate_request
       @current_user = AuthorizeApiRequest.new(request.headers).call[:user]
+      Current.user = @current_user
     rescue StandardError => e
       render json: { error: 'Unauthorized' }, status: :unauthorized
     end

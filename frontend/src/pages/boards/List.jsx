@@ -6,7 +6,7 @@ import './lists.css';
 import './tasks.css';
 
 export default function List({ list }) {
-  const { lists, getTasksForList, createTask, updateTask, deleteTask, updateList, deleteList } = useBoard();
+  const {board,lists, getTasksForList, createTask, updateTask, deleteTask, updateList, deleteList } = useBoard();
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(list.title || '');
   const [openCreate, setOpenCreate] = useState(false);
@@ -73,6 +73,7 @@ export default function List({ list }) {
             onClick={openEditModal}
             onUpdate={(attrs) => updateTask(list.id, task.id, attrs)}
             onDelete={(taskId) => deleteTask(list.id, taskId)}
+            boardId={board?.id}
           />
         ))}
       </div>
@@ -85,6 +86,7 @@ export default function List({ list }) {
         defaultListId={list.id}
         mode="create"
         onCreate={createViaModal}
+        boardId={board?.id}
       />
 
       
@@ -96,6 +98,7 @@ export default function List({ list }) {
         mode="edit"
         initial={selectedTask ? { ...selectedTask, list_id: list.id } : null}
         onUpdate={handleEditSave}
+        boardId={board?.id}
       />
     </div>
   );

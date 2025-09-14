@@ -24,6 +24,13 @@ Rails.application.routes.draw do
   end
 
   get 'users/search', to: 'users#search'
+ get 'users/search_board_members', to: 'users#search_board_members'
+ get "search", to: "search#index"
+
+get 'assignees', to: 'assignees#index'
+get 'histories', to: 'histories#index'
+
+
 
   resources :invites, only: [:index, :update, :destroy]
 

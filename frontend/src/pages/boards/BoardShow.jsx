@@ -78,7 +78,7 @@ export default function BoardShow() {
           <List key={list.id} list={list} />
         ))}
       </div>
-      <InviteModal open={inviteOpen} onClose={() => setInviteOpen(false)} boardId={board.id} canInvite={canInvite} />
+      <InviteModal open={inviteOpen} onClose={() => setInviteOpen(false)} boardId={board?.id} canInvite={canInvite} />
     </div>
   );
 }
