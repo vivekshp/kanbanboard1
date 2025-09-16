@@ -1,27 +1,51 @@
 class AuthenticationController < ApplicationController
     include ActionController::Cookies
+    include TenantHelper
+
     skip_before_action :authenticate_request, only: [:register, :login, :logout]
+    
+    
     def register
-      @user = User.create(user_params)
-      if @user.valid?
-        token = JwtService.encode(user_id: @user.id)
-        set_jwt_cookie(token)
-        render json: { user: @user.as_json(except: :password_digest), message: 'User created successfully' }, status: :created
-      else
-        render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+     tenant_name = extract_tenant_name(params[:email])
+     tenant = Tenant.find_by(name: tenant_name)
+     unless tenant
+       return render json: { errors: ["Tenant '#{tenant_name}' not found. Contact admin."] }, status: :unprocessable_entity
+     end
+
+     user = nil
+     Apartment::Tenant.switch(tenant.db_name) do
+      user = User.new(user_params)
+      unless user.save
+        return render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
       end
+     end
+         
+
+         token = JwtService.encode(user_id: user.id, tenant: tenant.db_name)
+         set_jwt_cookie(token)
+         render json: { user: user.as_json(except: :password_digest), message: 'User created successfully' }, status: :created
+      
     end
     
     def login
-      @user = User.find_by(email: params[:email])
-      if @user&.authenticate(params[:password])
-        token = JwtService.encode(user_id: @user.id)
-        set_jwt_cookie(token)
-        render json: { user: @user.as_json(except: :password_digest), message: 'Login successful' }
-      else
-        render json: { error: 'Invalid credentials' }, status: :unauthorized
+    tenant_name = extract_tenant_name(params[:email])
+    tenant = Tenant.find_by(name: tenant_name)
+    unless tenant
+      return render json: { error: 'Tenant not found' }, status: :unauthorized
+    end
+
+    user = nil
+    Apartment::Tenant.switch(tenant.db_name) do
+      user = User.find_by(email: params[:email])
+      unless user&.authenticate(params[:password])
+        return render json: { error: 'Invalid credentials' }, status: :unauthorized
       end
     end
+
+    token = JwtService.encode(user_id: user.id, tenant: tenant.db_name)
+    set_jwt_cookie(token)
+    render json: { user: user.as_json(except: :password_digest), message: 'Login successful' }
+  end
     
     def logout
       delete_jwt_cookie

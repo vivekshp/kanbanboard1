@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_14_092116) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_051118) do
   create_table "board_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "board_id", null: false
     t.bigint "user_id", null: false
@@ -90,6 +90,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_14_092116) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["list_id"], name: "index_tasks_on_list_id"
+  end
+
+  create_table "tenants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "domain"
+    t.string "db_name"
+    t.json "db_config"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
