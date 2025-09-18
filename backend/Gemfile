@@ -41,6 +41,11 @@ gem 'pundit'
 gem "sidekiq"
 
 gem 'ros-apartment', require: 'apartment'
+gem 'react-rails'
+gem 'webpacker', '~> 5.0'
+# gem 'sprockets-rails'
+gem 'turbo-rails'
+gem 'stimulus-rails'
 
 
 
@@ -55,4 +60,5 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
   gem "rspec-rails"
   gem "factory_bot_rails"
+  gem 'web-console'
 end

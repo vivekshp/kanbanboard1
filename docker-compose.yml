@@ -24,12 +24,15 @@ services:
     depends_on:
       - db
       - redis
-    command: bash -c "bundle install && rails server -b 0.0.0.0 -p 3000"
+    command: bash -c "bundle install && bin/dev"
+    stdin_open: true
+    tty: true
     ports:
       - "3000:3000"
+      - "3035:3035"
     environment:
       REDIS_URL: redis://redis:6379/0
-
+      BINDING: 0.0.0.0
   frontend:
     image: node:20
     working_dir: /app

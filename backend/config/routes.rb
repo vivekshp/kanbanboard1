@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root "home#index"
   get "invites/index"
   get "invites/update"
   get "invites/destroy"
@@ -33,6 +34,10 @@ get 'histories', to: 'histories#index'
 
 
   resources :invites, only: [:index, :update, :destroy]
+
+  get '*path', to: 'home#index', constraints: ->(req) {
+    !req.xhr? && req.format.html?
+  }
 
 
 end

@@ -1,4 +1,4 @@
-class ApplicationController < ActionController::API
+class ApplicationController < ActionController::Base
   include Pundit::Authorization
     around_action :switch_tenant
     before_action :authenticate_request
