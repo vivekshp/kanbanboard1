@@ -10,4 +10,4 @@
 
 3.rails db:migrate
 
-4.rails app:setup -> {This creates-> Tenants: gmail, apple ; Users: user1@.com, user2@.com ; Demo board}
+4.rails app:setup -> {This creates-> Tenants: gmail, apple ; Users: user1@tenant.com, user2@tenant.com ; Demo board}
